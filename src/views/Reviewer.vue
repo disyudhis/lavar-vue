@@ -29,9 +29,9 @@
       </app-list>
     </div>
   </div>
-  <div class="mt-96">
+  <!-- <div class="mt-96">
     <Footer></Footer>
-  </div>
+  </div> -->
 </template>
 
 <script>
