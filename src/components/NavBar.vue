@@ -22,7 +22,7 @@
         </router-link>
         <span class="bg-yellow-300 ml-2 text-white justify-center text-center items-center text-xs font-semibold mr-2 px-2.5 py-1 rounded">{{ updateKeranjang ? updateKeranjang.length : jumlah_pesanans.length }}</span>
       </div>
-      <div class="flex items-center px-5 md:block">
+      <div v-if="isLogin" class="block justify-center items-center px-5 md:flex">
         <div class="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full cursor-pointer dark:bg-gray-600" id="avatar" type="button" data-dropdown-toggle="userDropdown" data-dropdown-placement="bottom-start">
           <a>
             <svg class="absolute w-12 h-12 text-gray-400 -left-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -52,36 +52,51 @@
             </div>
           </div> -->
         </div>
+        <div class="px-2">
+          <button class="bg-yellow-300 rounded-full shadow-md text-sm px-2 py-1 text-white hover:bg-yellow-400" @click.prevent="doLogout">Logout</button>
+        </div>
       </div>
-      <div>
-        <button class="bg-yellow-300 rounded-full shadow-md text-sm px-2 py-1 text-white hover:bg-yellow-400" @click="$store.dispatch('logout')">Logout</button>
+
+      <div v-else>
+        <router-link to="/login" class="bg-yellow-300 rounded-full shadow-md text-sm px-2 py-1 text-white hover:bg-yellow-400">Login</router-link>
       </div>
     </div>
   </header>
 </template>
 
 <script>
-import { onBeforeMount } from "vue";
-import { useStore } from "vuex";
+// import { onBeforeMount } from "vue";
+// import { useStore } from "vuex";
 import axios from "axios";
+import { getAuth } from "@firebase/auth";
 export default {
   name: "NavBar",
-  setup() {
-    const store = useStore();
-
-    onBeforeMount(() => {
-      store.dispatch("fetchUser");
-    });
-  },
   data() {
     return {
       jumlah_pesanans: [],
+      isLogin: false,
+      user: {},
     };
+  },
+  created() {
+    const user = getAuth().currentUser;
+    if (user !== null) {
+      this.isLogin = true;
+      this.user = user;
+    }
   },
   props: ["updateKeranjang"],
   methods: {
     setJumlah(data) {
       this.jumlah_pesanans = data;
+    },
+    doLogout() {
+      getAuth()
+        .signOut()
+        .then(() => {
+          window.location.reload();
+        })
+        .catch((err) => alert(err.message));
     },
   },
   mounted() {

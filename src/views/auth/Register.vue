@@ -9,13 +9,15 @@
             </div>
 
             <div class="mt-8">
-              <form class="register" @submit.prevent="register">
+              <form class="register" @submit.prevent="doRegister">
                 <div class="grid grid-cols-1 gap-2 mt-2 items-center justify-center">
                   <div>
                     <label class="text-gray-700 dark:text-gray-200" for="username">Username</label>
                     <input
                       id="username"
                       type="text"
+                      required
+                      v-model="register_form.name"
                       class="block w-full px-4 py-2 mt-2 text-gray-700 bg-gray-300 bg-opacity-50 border border-transparent rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring"
                     />
                   </div>
@@ -25,6 +27,7 @@
                     <input
                       id="emailAddress"
                       type="email"
+                      required
                       v-model="register_form.email"
                       class="block w-full px-4 py-2 mt-2 text-gray-700 bg-gray-300 bg-opacity-50 border border-transparent rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring"
                     />
@@ -35,6 +38,7 @@
                     <input
                       id="password"
                       type="password"
+                      required
                       v-model="register_form.password"
                       class="block w-full px-4 py-2 mt-2 text-gray-700 bg-gray-300 bg-opacity-50 border border-transparent rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring"
                     />
@@ -129,23 +133,45 @@ const register = () => {
 </script> -->
 
 <script>
-import { ref } from "vue";
-import { useStore } from "vuex";
+// import { ref } from "vue";
+// import { useStore } from "vuex";
+
+import { createUserWithEmailAndPassword, getAuth, updateProfile } from "@firebase/auth";
 
 export default {
   name: "Register",
-  setup() {
-    const register_form = ref({});
-    const store = useStore();
+  // setup() {
+  //   const register_form = ref({});
+  //   const store = useStore();
 
-    const register = () => {
-      store.dispatch("register", register_form.value);
-    };
-
+  //   const register = () => {
+  //     store.dispatch("register", register_form.value);
+  //   };
+  data() {
     return {
-      register_form,
-      register,
+      register_form: {
+        name: "",
+        email: "",
+        password: "",
+      },
     };
+  },
+  methods: {
+    doRegister() {
+      createUserWithEmailAndPassword(getAuth(), this.register_form.name, this.register_form.email, this.register_form.password)
+        .then(() => {
+          updateProfile(getAuth().currentUser, {
+            displayName: this.register_form.name,
+          })
+            .then(() => {
+              this.$router.push({
+                path: "/",
+              });
+            })
+            .catch((err) => alert(err.message));
+        })
+        .catch((err) => alert(err.message));
+    },
   },
 };
 </script>

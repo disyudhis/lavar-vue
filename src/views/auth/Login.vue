@@ -14,7 +14,7 @@
             </div>
 
             <div class="mt-4">
-              <form class="login" @submit.prevent="login">
+              <form class="login" @submit.prevent="doLogin">
                 <div>
                   <label for="email" class="block mb-2 text-sm sr-only text-gray-600 dark:text-gray-200">Email Address</label>
                   <input
@@ -22,6 +22,7 @@
                     name="email"
                     id="email"
                     placeholder="Email"
+                    required
                     v-model="login_form.email"
                     class="block w-full px-4 py-2 mt-2 text-gray-900 placeholder-gray-500 bg-gray-300 bg-opacity-50 border border-transparent rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
                   />
@@ -37,6 +38,7 @@
                     name="password"
                     id="password"
                     placeholder="Your Password"
+                    required
                     v-model="login_form.password"
                     class="block w-full px-4 py-2 mt-2 text-gray-900 placeholder-gray-500 bg-gray-300 bg-opacity-50 border border-transparent rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
                   />
@@ -94,22 +96,28 @@
 </template>
 
 <script>
-import { ref } from "vue";
-import { useStore } from "vuex";
+import { getAuth, signInWithEmailAndPassword } from "@firebase/auth";
 
 export default {
-  setup() {
-    const login_form = ref({});
-    const store = useStore();
-
-    const login = () => {
-      store.dispatch("login", login_form.value);
-    };
-
+  name: "Login",
+  data() {
     return {
-      login,
-      login_form,
+      login_form: {
+        email: "",
+        password: "",
+      },
     };
+  },
+  methods: {
+    doLogin() {
+      signInWithEmailAndPassword(getAuth(), this.login_form.email, this.login_form.password)
+        .then(() => {
+          this.$router.push({ path: "/" });
+        })
+        .catch((err) => {
+          alert(err.message);
+        });
+    },
   },
 };
 </script>

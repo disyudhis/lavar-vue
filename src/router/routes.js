@@ -3,16 +3,13 @@ const routes = [
     path: "/",
     name: "AppLayout",
     component: () => import("../layouts/AppLayout.vue"),
-    meta: {
-      requiresAuth: true,
-    },
     children: [
       {
         path: "/",
         name: "LandingPage",
         component: () => import("../views/LandingPage.vue"),
         meta: {
-          requiresAuth: true,
+          requiresAuth: false,
         },
       },
       {
@@ -20,7 +17,7 @@ const routes = [
         name: "CariSeleramu",
         component: () => import("../views/CariSeleramu.vue"),
         meta: {
-          requiresAuth: true,
+          requiresAuth: false,
         },
       },
       {
@@ -28,7 +25,7 @@ const routes = [
         name: "Foods",
         component: () => import("../views/Foods.vue"),
         meta: {
-          requiresAuth: true,
+          requiresAuth: false,
         },
       },
       {
@@ -36,7 +33,7 @@ const routes = [
         name: "FoodDetail",
         component: () => import("../views/FoodDetail.vue"),
         meta: {
-          requiresAuth: true,
+          requiresAuth: false,
         },
       },
       {
@@ -77,17 +74,11 @@ const routes = [
     path: "/login",
     name: "Login",
     component: () => import("../views/auth/Login.vue"),
-    meta: {
-      requiresAuth: false,
-    },
   },
   {
     path: "/register",
     name: "Register",
     component: () => import("../views/auth/Register.vue"),
-    meta: {
-      requiresAuth: false,
-    },
   },
 ];
 
