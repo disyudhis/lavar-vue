@@ -24,11 +24,11 @@
       </div>
       <div class="flex items-center px-5 md:block">
         <div class="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full cursor-pointer dark:bg-gray-600" id="avatar" type="button" data-dropdown-toggle="userDropdown" data-dropdown-placement="bottom-start">
-          <router-link to="/login">
+          <a>
             <svg class="absolute w-12 h-12 text-gray-400 -left-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
               <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
             </svg>
-          </router-link>
+          </a>
 
           <!-- Dropdown menu -->
           <!-- <div id="userDropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
@@ -53,14 +53,26 @@
           </div> -->
         </div>
       </div>
+      <div>
+        <button class="bg-yellow-300 rounded-full shadow-md text-sm px-2 py-1 text-white hover:bg-yellow-400" @click="$store.dispatch('logout')">Logout</button>
+      </div>
     </div>
   </header>
 </template>
 
 <script>
+import { onBeforeMount } from "vue";
+import { useStore } from "vuex";
 import axios from "axios";
 export default {
   name: "NavBar",
+  setup() {
+    const store = useStore();
+
+    onBeforeMount(() => {
+      store.dispatch("fetchUser");
+    });
+  },
   data() {
     return {
       jumlah_pesanans: [],

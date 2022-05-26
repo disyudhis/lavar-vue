@@ -6,7 +6,7 @@
     <div>
       <Heros></Heros>
     </div>
-    <div class="pt-5">
+    <div class="mt-36">
       <Footer></Footer>
     </div>
   </body>

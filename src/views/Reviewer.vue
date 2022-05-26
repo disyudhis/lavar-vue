@@ -14,6 +14,9 @@
         <li class="mr-2 px-10">
           <a href="#" class="inline-block py-2 px-4 bg-white shadow-lg border text-gray-900 w-full rounded-full active hover:text-white hover:bg-yellow-400 hover:border-transparent">Reviewer Ranks</a>
         </li>
+        <li class="mr-2 px-10">
+          <router-link to="/profile" href="#" class="inline-block py-2 px-4 bg-white shadow-lg border text-gray-900 w-full rounded-full active hover:text-white hover:bg-yellow-400 hover:border-transparent">Reviewer Profile</router-link>
+        </li>
       </ul>
     </div>
     <!-- Akhir dari Tabs -->

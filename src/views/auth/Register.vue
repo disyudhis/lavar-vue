@@ -2,15 +2,15 @@
   <body>
     <div class="bg-transparent">
       <div class="flex justify-center h-screen">
-        <div class="flex items-center w-full max-w-xl px-6 mx-auto lg:w-1/2">
+        <div class="flex items-center w-full max-w-xl px-6 mx-auto lg:w-1/3">
           <div class="flex-1">
-            <div class="text-start">
-              <h2 class="text-4xl font-bold text-start text-orange-400">Register</h2>
+            <div class="text-center">
+              <h2 class="text-4xl font-extrabold text-start text-orange-400">Register</h2>
             </div>
 
             <div class="mt-8">
-              <form>
-                <div class="grid grid-cols-1 gap-2 mt-2 sm:grid-cols-2">
+              <form class="register" @submit.prevent="register">
+                <div class="grid grid-cols-1 gap-2 mt-2 items-center justify-center">
                   <div>
                     <label class="text-gray-700 dark:text-gray-200" for="username">Username</label>
                     <input
@@ -24,16 +24,8 @@
                     <label class="text-gray-700 dark:text-gray-200" for="emailAddress">Email Address</label>
                     <input
                       id="emailAddress"
-                      type="text"
-                      v-model="email"
-                      class="block w-full px-4 py-2 mt-2 text-gray-700 bg-gray-300 bg-opacity-50 border border-transparent rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring"
-                    />
-                  </div>
-                  <div>
-                    <label class="text-gray-700 dark:text-gray-200" for="emailAddress">Phone Number</label>
-                    <input
-                      id="phoneNumber"
-                      type="phoneNumber"
+                      type="email"
+                      v-model="register_form.email"
                       class="block w-full px-4 py-2 mt-2 text-gray-700 bg-gray-300 bg-opacity-50 border border-transparent rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring"
                     />
                   </div>
@@ -43,7 +35,7 @@
                     <input
                       id="password"
                       type="password"
-                      v-model="password"
+                      v-model="register_form.password"
                       class="block w-full px-4 py-2 mt-2 text-gray-700 bg-gray-300 bg-opacity-50 border border-transparent rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring"
                     />
                   </div>
@@ -66,9 +58,8 @@
                   <label for="link-checkbox" class="ml-2 text-sm font-medium text-gray-400">I agree with the <a href="#" class="text-yellow-300 hover:underline">terms and conditions</a>.</label>
                 </div> -->
                 <a
-                  @click="signInWithGoogle"
                   href="#"
-                  class="flex items-center justify-center mt-4 bg-white shadow-lg text-gray-900 transition-colors duration-200 transform border rounded-lg border-transparent dark:border-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600"
+                  class="flex items-center justify-center mt-4 bg-transparent shadow-md border-black text-gray-900 transition-colors duration-200 transform border rounded-lg border-transparent dark:border-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600"
                 >
                   <div class="px-4 py-2">
                     <svg class="w-6 h-6" viewBox="0 0 40 40">
@@ -95,7 +86,7 @@
                 </a>
 
                 <div class="flex justify-start mt-6">
-                  <button @click="register" class="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-yellow-300 rounded-md hover:bg-yellow-200 focus:outline-none focus:bg-yellow-200">Sign up</button>
+                  <button type="submit" value="Register" class="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-yellow-300 rounded-md hover:bg-yellow-200 focus:outline-none focus:bg-yellow-200">Sign up</button>
                 </div>
               </form>
 
@@ -116,7 +107,7 @@
   </body>
 </template>
 
-<script setup>
+<!-- <script setup>
 import { ref } from "vue";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "vue-router";
@@ -135,11 +126,27 @@ const register = () => {
       alert(error.message);
     });
 };
-</script>
+</script> -->
 
 <script>
+import { ref } from "vue";
+import { useStore } from "vuex";
+
 export default {
   name: "Register",
+  setup() {
+    const register_form = ref({});
+    const store = useStore();
+
+    const register = () => {
+      store.dispatch("register", register_form.value);
+    };
+
+    return {
+      register_form,
+      register,
+    };
+  },
 };
 </script>
 
