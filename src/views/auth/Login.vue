@@ -45,6 +45,7 @@
                   <a href="#" class="text-sm text-gray-400 focus:text-blue-500 hover:text-blue-500 hover:underline">Forgot password?</a>
                 </div>
                 <a
+                  @click.prevent="doLoginGoogle"
                   href=""
                   class="flex items-center justify-center mt-4 bg-gray-300 bg-opacity-50 text-gray-900 transition-colors duration-200 transform border rounded-lg border-transparent dark:border-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600"
                 >
@@ -96,7 +97,9 @@
 </template>
 
 <script>
-import { getAuth, signInWithEmailAndPassword } from "@firebase/auth";
+import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "@firebase/auth";
+
+const provider = new GoogleAuthProvider();
 
 export default {
   name: "Login",
@@ -117,6 +120,16 @@ export default {
         .catch((err) => {
           alert(err.message);
         });
+    },
+    doLoginGoogle() {
+      signInWithPopup(getAuth(), provider)
+        .then((result) => {
+          const credential = GoogleAuthProvider.credentialFromResult(result);
+          const token = credential.accessToken;
+          const user = result.user;
+          this.$router.push({ path: "/" });
+        })
+        .catch((err) => alert(err.message));
     },
   },
 };

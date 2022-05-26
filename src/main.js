@@ -8,13 +8,11 @@ import { MenuIcon, XIcon } from "@heroicons/vue/outline";
 import "flowbite";
 import "vue-toast-notification/dist/theme-default.css";
 import "./assets/css/main.css";
-
 import firebase from "./firebase";
 
 const app = createApp(App);
 
 app.use(VueToast);
 app.use(router);
-
 app.config.globalProperties.$firebase = firebase;
 app.mount("#app");

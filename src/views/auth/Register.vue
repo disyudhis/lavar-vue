@@ -62,8 +62,9 @@
                   <label for="link-checkbox" class="ml-2 text-sm font-medium text-gray-400">I agree with the <a href="#" class="text-yellow-300 hover:underline">terms and conditions</a>.</label>
                 </div> -->
                 <a
+                  @click.prevent="doRegisterGoogle"
                   href="#"
-                  class="flex items-center justify-center mt-4 bg-transparent shadow-md border-black text-gray-900 transition-colors duration-200 transform border rounded-lg border-transparent dark:border-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600"
+                  class="flex items-center justify-center mt-4 bg-gray-300 bg-opacity-50 shadow-lg text-gray-900 transition-colors duration-200 transform border rounded-lg border-transparent dark:border-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600"
                 >
                   <div class="px-4 py-2">
                     <svg class="w-6 h-6" viewBox="0 0 40 40">
@@ -136,7 +137,8 @@ const register = () => {
 // import { ref } from "vue";
 // import { useStore } from "vuex";
 
-import { createUserWithEmailAndPassword, getAuth, updateProfile } from "@firebase/auth";
+import { createUserWithEmailAndPassword, getAuth, updateProfile, signInWithPopup, GoogleAuthProvider } from "@firebase/auth";
+const provider = new GoogleAuthProvider();
 
 export default {
   name: "Register",
@@ -169,6 +171,16 @@ export default {
               });
             })
             .catch((err) => alert(err.message));
+        })
+        .catch((err) => alert(err.message));
+    },
+    doRegisterGoogle() {
+      signInWithPopup(getAuth(), provider)
+        .then((result) => {
+          const credential = GoogleAuthProvider.credentialFromResult(result);
+          const token = credential.accessToken;
+          const user = result.user;
+          this.$router.push({ path: "/" });
         })
         .catch((err) => alert(err.message));
     },
