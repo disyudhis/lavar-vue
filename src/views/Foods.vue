@@ -56,9 +56,6 @@
           <div v-for="product in products" :key="product.id">
             <CardsProduct :product="product" class="mt-2"></CardsProduct>
           </div>
-          <div class="bg-cover lg:block lg:w-52">
-            <div class="flex items-center h-full px-20"></div>
-          </div>
         </app-list>
       </div>
     </div>

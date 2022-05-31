@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-sm mx-4 my-3 bg-white rounded-lg shadow-md">
+  <div class="max-w-lg mx-4 my-3 bg-white rounded-lg shadow-md">
     <a href="#">
       <img class="w-full max-h-28 rounded-t-lg object-cover object-center" :src="'assets/images/' + product.gambar" alt="product image" />
     </a>

@@ -140,8 +140,11 @@
                 <!-- Pedas apa tidak -->
                 <div>
                   <label for="cuisine" class="block text-xxl font-bold text-gray-700"> Suka Pedas apa Tidak ? </label>
+                  <div v-for="category in categories" :key="category.id" class="inline-flex items-center">
+                    <Category :category="category"></Category>
+                  </div>
 
-                  <div class="rounded-md shadow inline-flex items-center justify-center px-2 py-1 mx-1 border border-transparent bg-red-300 md:m-2">
+                  <!-- <div class="rounded-md shadow inline-flex items-center justify-center px-2 py-1 mx-1 border border-transparent bg-red-300 md:m-2">
                     <div class="flex items-center mr-4">
                       <input
                         unchecked
@@ -200,7 +203,7 @@
                       />
                       <label for="cyan-checkbox" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Asin</label>
                     </div>
-                  </div>
+                  </div> -->
 
                   <p class="mt-2 text-sm text-gray-500">Bisa pilih beberapa.</p>
                 </div>
@@ -263,17 +266,36 @@
 <script>
 import SideBar from "../components/SideBar.vue";
 import Footer from "../components/Footer.vue";
-
 import NavBar from "../components/NavBar.vue";
 import Maps from "../components/Maps.vue";
+import axios from "axios";
+import Category from "../components/Category.vue";
 export default {
   name: "Cari Seleramu",
   components: {
     SideBar,
     Footer,
-
     NavBar,
     Maps,
+    Category,
+  },
+  data() {
+    return {
+      categories: [],
+    };
+  },
+  methods: {
+    setCategory(data) {
+      this.categories = data;
+    },
+  },
+  mounted() {
+    axios
+      .get("http://localhost:3009/categories")
+      .then((response) => {
+        this.setCategory(response.data);
+      })
+      .catch((err) => alert(err.message));
   },
 };
 </script>

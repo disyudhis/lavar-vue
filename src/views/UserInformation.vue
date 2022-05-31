@@ -40,9 +40,11 @@
           </div>
           <!-- Left Bar -->
           <div v-if="isLogin" class="flex flex-col items-center pb-10">
-            <img class="mb-3 w-24 h-24 rounded-full shadow-lg" :src="'../assets/images/reviewers/' + reviewers.gambar" />
-            <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">{{ reviewers.nama }}</h5>
-            <span class="text-sm text-gray-500 dark:text-gray-400">{{ reviewers.asal }}</span>
+            <img class="mb-3 w-24 h-24 rounded-full shadow-lg" :src="photo" />
+            <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">{{ name }}</h5>
+            <span class="text-sm text-gray-500 dark:text-gray-400">
+              <!-- asal -->
+            </span>
             <div class="flex mt-4 space-x-3 lg:mt-6">
               <a
                 href="#"
@@ -61,17 +63,17 @@
         <div class="p-4 w-full m-auto text-left border shadow-md sm:p-8 dark:bg-gray-800 dark:border-gray-700" style="background: #fffdf4">
           <h5 class="mb-2 text-3l font-bold text-gray-900 dark:text-white"></h5>
           <p class="mb-5 text-base text-gray-500 sm:text-sm dark:text-gray-400">
-            {{ reviewers.bio }}
+            <!-- bio -->
           </p>
           <div class="justify-center items-center space-y-4 sm:flex sm:space-y-0 sm:space-x-4"></div>
         </div>
         <br /><br />
         <div class="p-4 w-full m-auto text-left border shadow-md sm:p-8 dark:bg-gray-800 dark:border-gray-700" style="background: #fffdf4">
           <h3 class="mb-2 text-2xl text-center font-bold text-gray-900 dark:text-white">Badges</h3>
-          <div class="flex flex-nowrap gap-2 ml-3">
-            <div><img src="../assets/badges/award.png" /></div>
-            <div><img src="../assets/badges/quality.png" /></div>
-            <div><img src="../assets/badges/winner.png" /></div>
+          <div class="flex flex-nowrap">
+            <div><img src="../assets/badges/award.png" alt="Badges 1" /></div>
+            <div><img src="../assets/badges/quality.png" alt="Badges 2" /></div>
+            <div><img src="../assets/badges/winner.png" alt="Badges 3" /></div>
           </div>
           <div class="justify-center items-center space-y-4 sm:flex sm:space-y-0 sm:space-x-4"></div>
         </div>
@@ -267,48 +269,26 @@
 
 <script>
 import { getAuth } from "@firebase/auth";
-import axios from "axios";
 import NavBar from "../components/NavBar.vue";
 export default {
-  name: "ReviewerProfile",
+  name: "UserInformation",
   components: {
     NavBar,
   },
   data() {
     return {
+      name: null,
       isLogin: false,
-      reviewers: [],
-      restoran: [],
+      photo: null,
     };
-  },
-  methods: {
-    setReviewer(data) {
-      this.reviewers = data;
-    },
-    // setRestoran(data) {
-    //   this.restoran = data;
-    // },
   },
   created() {
     const user = getAuth().currentUser;
     if (user !== null) {
       this.isLogin = true;
+      this.name = user.displayName;
+      this.photo = user.photoURL;
     }
-  },
-  mounted() {
-    axios
-      .get("http://localhost:3009/reviewers/" + this.$route.params.id)
-      .then((response) => {
-        this.setReviewer(response.data);
-      })
-      .catch((err) => alert(err.message));
-
-    // axios
-    //   .get("http://localhost:3009/restoran")
-    //   .then((response) => {
-    //     this.setRestoran(response.data);
-    //   })
-    //   .catch((err) => alert(err.message));
   },
 };
 </script>
