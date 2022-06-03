@@ -24,9 +24,9 @@
           <span class="bg-yellow-300 ml-2 text-white justify-center text-center items-center text-xs font-semibold mr-2 px-2.5 py-1 rounded">{{ updateKeranjang ? updateKeranjang.length : jumlah_pesanans.length }}</span>
         </div>
         <div class="block justify-center items-center px-5 md:flex">
-          <div class="bg-gray-50 bg-opacity-90 px-4 rounded-lg">
-            <p class="text-lg"><b>Hai, </b> {{ user.displayName }}</p>
-          </div>
+          <router-link to="/user-information">
+            <img class="w-10 h-10 rounded-full mr-3" :src="photo" />
+          </router-link>
           <!-- <div class="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full cursor-pointer dark:bg-gray-600" id="avatar" type="button" data-dropdown-toggle="userDropdown" data-dropdown-placement="bottom-start"> -->
           <!-- <a>
               <svg class="absolute w-12 h-12 text-gray-400 -left-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -86,6 +86,7 @@ export default {
     if (user !== null) {
       this.isLogin = true;
       this.user = user;
+      this.photo = user.photoURL;
     }
   },
   props: ["updateKeranjang"],

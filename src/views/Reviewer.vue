@@ -9,16 +9,13 @@
           <a href="#" class="inline-block py-2 px-4 bg-yellow-300 text-white shadow-lg border w-28 rounded-full active hover:bg-yellow-400 hover:border-transparent" aria-current="page">All</a>
         </li>
         <li class="mr-2 px-10">
-          <a href="#" class="inline-block py-2 px-4 bg-white shadow-lg border text-gray-900 w-full rounded-full active hover:text-white hover:bg-yellow-400 hover:border-transparent">Be The Reviewer</a>
-        </li>
-        <li class="mr-2 px-10">
           <a href="#" class="inline-block py-2 px-4 bg-white shadow-lg border text-gray-900 w-full rounded-full active hover:text-white hover:bg-yellow-400 hover:border-transparent">Reviewer Ranks</a>
         </li>
-        <li class="mr-2 px-10">
+        <!-- <li class="mr-2 px-10">
           <router-link to="/user-information" href="#" class="inline-block py-2 px-4 bg-white shadow-lg border text-gray-900 w-full rounded-full active hover:text-white hover:bg-yellow-400 hover:border-transparent"
             >Reviewer Profile</router-link
           >
-        </li>
+        </li> -->
       </ul>
     </div>
     <div>

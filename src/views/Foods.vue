@@ -59,9 +59,6 @@
         </app-list>
       </div>
     </div>
-    <div>
-      <!-- <Footer></Footer> -->
-    </div>
   </body>
 </template>
 
@@ -73,7 +70,6 @@ body {
 
 <script>
 import NavBar from "../components/NavBar.vue";
-import Footer from "../components/Footer.vue";
 import SideBar from "../components/SideBar.vue";
 import CardsProduct from "../components/CardsProduct.vue";
 import axios from "axios";
@@ -83,7 +79,6 @@ export default {
   name: "Foods",
   components: {
     NavBar,
-    Footer,
     SideBar,
     CardsProduct,
     "app-list": List,
