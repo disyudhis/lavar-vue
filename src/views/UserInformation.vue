@@ -155,10 +155,9 @@
               </div>
             </aside>
           </div>
-          <!--         
-          <article>
+          <div class="bg-white rounded-lg shadow-md p-5 mx-3 my-3">
             <div class="flex items-center mb-4 space-x-4">
-              <img class="w-10 h-10 rounded-full" src="" alt="Foto Penjual" />
+              <img class="w-10 h-10 rounded-full" src="../../public/assets/images/seller/anom.jfif" alt="Foto Penjual" />
               <div class="space-y-1 font-medium dark:text-white">
                 <p>Ayam Tulang Lunak Mang Anom <time datetime="2022-03-23 15:32" class="block text-sm text-gray-500 dark:text-gray-400">Last Review: 2022-03-23</time></p>
               </div>
@@ -205,11 +204,11 @@
                 <a href="#" class="pl-4 text-sm font-medium text-blue-600 hover:underline dark:text-blue-500">Pesan?</a>
               </div>
             </aside>
-          </article>
+          </div>
 
-          <article>
+          <div class="bg-white rounded-lg shadow-md p-5 mx-3 my-3">
             <div class="flex items-center mb-4 space-x-4">
-              <img class="w-10 h-10 rounded-full" src="" alt="Foto Penjual" />
+              <img class="w-10 h-10 rounded-full" src="../assets/seller/bronson.jfif" alt="Foto Penjual" />
               <div class="space-y-1 font-medium dark:text-white">
                 <p>Geprek Bronson <time datetime="2022-03-20 12:22" class="block text-sm text-gray-500 dark:text-gray-400">Last Review: 2022-03-20</time></p>
               </div>
@@ -256,7 +255,7 @@
                 <a href="#" class="pl-4 text-sm font-medium text-blue-600 hover:underline dark:text-blue-500">Pesan?</a>
               </div>
             </aside>
-          </article> -->
+          </div>
         </div>
       </div>
     </div>
