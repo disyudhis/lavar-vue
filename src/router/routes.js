@@ -76,6 +76,14 @@ const routes = [
           requiresAuth: true,
         },
       },
+      {
+        path: "/rating/:id",
+        name: "BeriRating",
+        component: () => import("../views/BeriRating.vue"),
+        meta: {
+          requiresAuth: true,
+        },
+      },
     ],
   },
   {

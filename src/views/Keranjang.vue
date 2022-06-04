@@ -177,7 +177,9 @@ export default {
   data() {
     return {
       keranjangs: [],
-      pesan: {},
+      pesan: {
+        id: 1,
+      },
     };
   },
   methods: {

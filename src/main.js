@@ -9,6 +9,7 @@ import "flowbite";
 import "vue-toast-notification/dist/theme-default.css";
 import "./assets/css/main.css";
 import firebase from "./firebase";
+import "tw-elements";
 
 const app = createApp(App);
 
