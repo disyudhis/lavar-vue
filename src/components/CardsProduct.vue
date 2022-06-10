@@ -36,6 +36,9 @@
         </svg>
         <span class="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ml-3">5.0</span>
       </div>
+      <div class="my-2">
+        <span class="bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-red-200 dark:text-red-900" v-for="kategori in product.kategori" :key="kategori.id">{{ kategori.nama }}</span>
+      </div>
       <div class="flex justify-between items-center mb-2">
         <span class="text-lg font-bold text-gray-900 dark:text-white"
           ><h2>Rp. {{ product.harga }}</h2></span

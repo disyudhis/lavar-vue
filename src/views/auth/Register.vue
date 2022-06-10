@@ -23,9 +23,9 @@
                   </div>
 
                   <div>
-                    <label class="text-gray-700 dark:text-gray-200" for="emailAddress">Email Address</label>
+                    <label class="text-gray-700 dark:text-gray-200" for="email">Email Address</label>
                     <input
-                      id="emailAddress"
+                      id="email"
                       type="email"
                       required
                       v-model="register_form.email"
@@ -43,24 +43,8 @@
                       class="block w-full px-4 py-2 mt-2 text-gray-700 bg-gray-300 bg-opacity-50 border border-transparent rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring"
                     />
                   </div>
+                </div>
 
-                  <!-- <div>
-                    <label class="text-gray-700 dark:text-gray-200" for="passwordConfirmation">Password Confirmation</label>
-                    <input
-                      id="passwordConfirmation"
-                      type="password"
-                      class="block w-full px-4 py-2 mt-2 text-gray-700 bg-gray-300 bg-opacity-50 border border-transparent rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring"
-                    />
-                  </div> -->
-                </div>
-                <!-- <div class="flex items-center mt-4">
-                  <input id="link-checkbox" type="checkbox" value="" class="w-4 h-4 text-yellow-300 bg-gray-100 rounded border-gray-300 focus:ring-yellow-300 focus:ring-2" />
-                  <label for="link-checkbox" class="ml-2 text-sm font-medium text-gray-400">Yes, i want to receive Lavar emails.</label>
-                </div>
-                <div class="flex items-center mt-4">
-                  <input id="link-checkbox" type="checkbox" value="" class="w-4 h-4 text-yellow-300 bg-gray-100 rounded border-gray-300 focus:ring-yellow-300 focus:ring-2" />
-                  <label for="link-checkbox" class="ml-2 text-sm font-medium text-gray-400">I agree with the <a href="#" class="text-yellow-300 hover:underline">terms and conditions</a>.</label>
-                </div> -->
                 <a
                   @click.prevent="doRegisterGoogle"
                   href="#"
@@ -134,9 +118,6 @@ const register = () => {
 </script> -->
 
 <script>
-// import { ref } from "vue";
-// import { useStore } from "vuex";
-
 import { createUserWithEmailAndPassword, getAuth, updateProfile, signInWithPopup, GoogleAuthProvider } from "@firebase/auth";
 const provider = new GoogleAuthProvider();
 
@@ -160,7 +141,7 @@ export default {
   },
   methods: {
     doRegister() {
-      createUserWithEmailAndPassword(getAuth(), this.register_form.name, this.register_form.email, this.register_form.password)
+      createUserWithEmailAndPassword(getAuth(), this.register_form.email, this.register_form.password)
         .then(() => {
           updateProfile(getAuth().currentUser, {
             displayName: this.register_form.name,

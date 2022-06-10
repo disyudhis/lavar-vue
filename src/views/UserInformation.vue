@@ -43,6 +43,13 @@
             <img class="mb-3 w-24 h-24 rounded-full shadow-lg" :src="photo" />
             <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">{{ name }}</h5>
             <span class="text-sm text-gray-500 dark:text-gray-400">
+              <p class="flex text-lg justify-center items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                Bandung
+              </p>
               <!-- asal -->
             </span>
             <div class="flex mt-4 space-x-3 lg:mt-6">
@@ -58,12 +65,16 @@
                 >Message</a
               >
             </div>
+            <div class="inline-flex mt-5">
+              <span class="w-full bg-red-800 text-white text-sm font-semibold mr-2 px-2.5 py-0.5 rounded-lg dark:bg-red-200 dark:text-red-900">Pedas</span>
+              <span class="w-full bg-red-800 text-white text-sm font-semibold mr-2 px-2.5 py-0.5 rounded-lg dark:bg-red-200 dark:text-red-900">Asin</span>
+            </div>
           </div>
         </div>
         <div class="p-4 w-full m-auto text-left border shadow-md sm:p-8 dark:bg-gray-800 dark:border-gray-700" style="background: #fffdf4">
           <h5 class="mb-2 text-3l font-bold text-gray-900 dark:text-white"></h5>
           <p class="mb-5 text-base text-gray-500 sm:text-sm dark:text-gray-400">
-            <!-- bio -->
+            Hai semuanya! siapa sih disini yang gasuka makanan asin sama pedes. Aneh aja gasih kalo jaman sekarang, ada orang yang gasuka makan pedes? Yuu, yang ada saran makanan enak di Bandung, bisa dm yaaa
           </p>
           <div class="justify-center items-center space-y-4 sm:flex sm:space-y-0 sm:space-x-4"></div>
         </div>

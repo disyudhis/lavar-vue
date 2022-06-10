@@ -29,6 +29,7 @@ export default {
     setPesanan(data) {
       this.pesanans = data;
     },
+    setRating() {},
   },
   mounted() {
     axios
