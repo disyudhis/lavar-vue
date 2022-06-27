@@ -1,33 +1,199 @@
 <template>
-  <svg class="w-5 h-5 text-yellow-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-    <path
-      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
-    ></path>
-  </svg>
-  <svg class="w-5 h-5 text-yellow-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-    <path
-      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
-    ></path>
-  </svg>
-  <svg class="w-5 h-5 text-yellow-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-    <path
-      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
-    ></path>
-  </svg>
-  <svg class="w-5 h-5 text-yellow-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-    <path
-      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
-    ></path>
-  </svg>
-  <svg class="w-5 h-5 text-yellow-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-    <path
-      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
-    ></path>
-  </svg>
+  <div class="rating">
+    <ul class="list" :class="{ disabled: disabled }">
+      <li :key="star" v-for="star in maxstars" @mouseover="hoverStar(star)" @mouseleave="mouseLeftStar" :class="[{ active: star <= stars }]" @click="rate(star)" class="star">
+        <font-awesome-icon :class="`fa-${starsize}`" :icon="[star <= stars ? 'fas' : 'far', 'star']" />
+      </li>
+      <span v-if="hasdescription && star_desc" :class="star_desc.class">{{ star_desc.text }}</span>
+      <span v-else-if="!star_desc" class="nostar_desc">No Description</span>
+    </ul>
+    <span v-if="hasresults">{{ stars }} of {{ maxstars }}</span>
+  </div>
 </template>
 
 <script>
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { fas } from "@fortawesome/free-solid-svg-icons";
+import { far } from "@fortawesome/free-regular-svg-icons";
+library.add(fas);
+library.add(far);
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
 export default {
   name: "Rating",
+  components: {
+    FontAwesomeIcon,
+  },
+  data() {
+    return {
+      stars: this.star,
+      star_desc: this.getRatingDesc(this.star),
+    };
+  },
+  props: {
+    star: {
+      type: Number,
+    },
+    maxstars: {
+      type: Number,
+      default: 5,
+    },
+    hasresults: {
+      type: Boolean,
+      default: true,
+    },
+    hasdescription: {
+      type: Boolean,
+      default: true,
+    },
+    ratingdescription: {
+      type: Array,
+      default: () => {
+        return [
+          {
+            text: "Poor",
+            class: "star-poor",
+          },
+          {
+            text: "Below Average",
+            class: "star-belowAverage",
+          },
+          {
+            text: "Average",
+            class: "star-average",
+          },
+          {
+            text: "Good",
+            class: "star-good",
+          },
+          {
+            text: "Excellent",
+            class: "star-excellent",
+          },
+        ];
+      },
+      //default: ["Poor", "Below Average", "Average", "Good", "Excellent"]
+    },
+    starsize: {
+      type: String,
+      default: "2x",
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  methods: {
+    rate(star) {
+      if (this.disabled) {
+        return;
+      }
+      if (star <= this.maxstars && star >= 0) {
+        this.stars = this.stars === star ? star - 1 : star;
+      }
+    },
+    hoverStar(star) {
+      if (this.disabled) {
+        return;
+      }
+      if (star <= this.maxstars && star >= 0) {
+        this.star_desc = this.ratingdescription[star - 1];
+      }
+    },
+    mouseLeftStar() {
+      if (this.disabled) {
+        return;
+      }
+      if (this.stars) {
+        this.star_desc = this.ratingdescription[this.stars - 1];
+        return this.star_desc;
+      } else {
+        this.star_desc = "";
+      }
+    },
+    getRatingDesc(star) {
+      if (star) {
+        this.star_desc = this.ratingdescription[star - 1];
+      }
+      return this.star_desc;
+    },
+  },
 };
 </script>
+
+<style lang="scss">
+@import "@/assets/_shared.scss";
+
+.rating {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+ul.list li,
+span {
+  display: inline-block;
+  margin: 2px;
+}
+.list {
+  margin: 0 0 5px 0;
+  padding: 0;
+  list-style-type: none;
+  &:hover {
+    .star {
+      color: $active-color;
+    }
+  }
+  span {
+    width: 130px;
+    margin-left: 5px;
+    padding: 5px;
+    color: $white-color;
+    border-radius: 15px;
+    font-size: 13px;
+    text-align: center;
+    font-weight: bold;
+    transition: 0.2s;
+    line-height: 25px;
+  }
+}
+.list.disabled {
+  &:hover {
+    .star {
+      color: black;
+      cursor: default;
+    }
+    .star.active {
+      color: $active-color;
+    }
+  }
+}
+.star {
+  cursor: pointer;
+  &:hover {
+    & ~ .star {
+      &:not(.active) {
+        color: inherit;
+      }
+    }
+  }
+}
+.active {
+  color: $active-color;
+}
+.star-poor {
+  background: $poor-color;
+}
+.star-belowAverage {
+  background: $below-average-color;
+}
+.star-average {
+  background: $active-color;
+}
+.star-good {
+  background: $good-color;
+}
+.star-excellent {
+  background: $excellent-color;
+}
+.nostar_desc {
+  background: $no-star-desc-color;
+}
+</style>

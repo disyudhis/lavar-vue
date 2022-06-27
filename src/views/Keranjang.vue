@@ -54,18 +54,18 @@
         <tbody class="rounded-lg shadow-sm">
           <tr v-for="(keranjang, index) in keranjangs" :key="keranjang.id" class="bg-white border-b rounded-lg hover:bg-gray-50">
             <th class="px-6 py-4">{{ index + 1 }}</th>
-            <td class="px-6 py-4 font-medium text-gray-900 w-1/4"><img :src="'../assets/images/' + keranjang.products.gambar" class="rounded-lg shadow-md" /></td>
+            <td class="px-6 py-4 font-medium text-gray-900 w-1/4"><img :src="'../assets/images/' + keranjang.data.products.gambar" class="rounded-lg shadow-md" /></td>
             <td class="px-6 py-4">
-              <strong>{{ keranjang.products.nama }}</strong>
+              <strong>{{ keranjang.data.products.nama }}</strong>
             </td>
-            <td class="px-6 py-4">{{ keranjang.jumlah_pesanan }}</td>
-            <td class="px-6 py-4">{{ keranjang.keterangan ? keranjang.keterangan : "-" }}</td>
-            <td class="px-6 py-4 text-md">Rp.{{ keranjang.products.harga }}</td>
+            <td class="px-6 py-4">{{ keranjang.data.jumlah_pesanan }}</td>
+            <td class="px-6 py-4">{{ keranjang.data.keterangan ? keranjang.data.keterangan : "-" }}</td>
+            <td class="px-6 py-4 text-md">Rp.{{ keranjang.data.products.harga }}</td>
             <td class="px-6 py-4 text-md">
-              <b>Rp.{{ keranjang.products.harga * keranjang.jumlah_pesanan }}</b>
+              <b>Rp.{{ keranjang.data.products.harga * keranjang.data.jumlah_pesanan }}</b>
             </td>
             <td class="px-6 py-4 pl-14 text-center items-center justify-center">
-              <svg @click="hapusKeranjang(keranjang.id)" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 cursor-pointer text-yellow-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <svg @click="hapusKeranjang" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 cursor-pointer text-yellow-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
               </svg>
             </td>
@@ -168,8 +168,7 @@
 <script>
 import Footer from "../components/Footer.vue";
 import NavBar from "../components/NavBar.vue";
-
-import axios from "axios";
+import { collection, getFirestore, query, getDocs, doc, deleteDoc } from "@firebase/firestore";
 
 export default {
   name: "Keranjang",
@@ -180,72 +179,98 @@ export default {
       pesan: {},
     };
   },
+  created() {
+    this.getKeranjangs();
+  },
   methods: {
-    setKeranjangs(data) {
-      this.keranjangs = data;
+    getKeranjangs() {
+      let q;
+      const db = getFirestore(this.$firebase);
+      q = query(collection(db, "keranjangs"));
+      getDocs(q)
+        .then((document) => {
+          this.keranjangs.length = 0;
+          document.forEach((document) => {
+            this.keranjangs.push({
+              id: document.id,
+              data: {
+                ...document.data(),
+              },
+            });
+          });
+        })
+        .catch((error) => {
+          alert(error.message);
+        });
     },
-    hapusKeranjang(id) {
-      axios
-        .delete("http://localhost:3009/keranjangs/" + id)
-        .then(() => {
+
+    hapusKeranjang() {
+      const isConfirmDeleted = confirm("Yakin ingin menghapus ini?");
+      if (isConfirmDeleted) {
+        const db = getFirestore(this.$firebase);
+        const deletedRef = doc(db, "keranjangs", this.keranjangs.id);
+        deleteDoc(deletedRef).then(() => {
           this.$toast.error("Sukses Hapus Keranjang", {
             type: "error",
             position: "top-right",
             dismissible: true,
           });
-          // Update data keranjang
-          axios
-            .get("http://localhost:3009/keranjangs")
-            .then((response) => this.setKeranjangs(response.data))
-            .catch((error) => console.log(error));
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-    checkout() {
-      if (this.pesan.nama && this.pesan.alamat && this.pesan.noTelp && this.pesan.pembayaran) {
-        this.pesan.keranjangs = this.keranjangs;
-        axios
-          .post("http://localhost:3009/pesanans", this.pesan)
-          .then(() => {
-            // Hapus Keranjang
-            this.keranjangs.map(function (item) {
-              return axios.delete("http://localhost:3009/keranjangs/" + item.id).catch((error) => console.log(error));
-            });
-            this.$router.push({ path: "/pesanan-sukses" });
-            this.$toast.success("Sukses dipesan", {
-              type: "success",
-              position: "top-right",
-              dismissible: true,
-            });
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      } else {
-        this.$toast.error("Form harus diisi", {
-          type: "error",
-          position: "top-right",
-          dismissible: true,
         });
       }
     },
+    // hapusKeranjang(id) {
+    //   axios
+    //     .delete("http://localhost:3009/keranjangs/" + id)
+    //     .then(() => {
+    //       this.$toast.error("Sukses Hapus Keranjang", {
+    //         type: "error",
+    //         position: "top-right",
+    //         dismissible: true,
+    //       });
+    //       // Update data keranjang
+    //       axios
+    //         .get("http://localhost:3009/keranjangs")
+    //         .then((response) => this.setKeranjangs(response.data))
+    //         .catch((error) => console.log(error));
+    //     })
+    //     .catch((error) => {
+    //       console.log(error);
+    //     });
+    // },
+    // checkout() {
+    //   if (this.pesan.nama && this.pesan.alamat && this.pesan.noTelp && this.pesan.pembayaran) {
+    //     this.pesan.keranjangs = this.keranjangs;
+    //     axios
+    //       .post("http://localhost:3009/pesanans", this.pesan)
+    //       .then(() => {
+    //         // Hapus Keranjang
+    //         // this.keranjangs.map(function (item) {
+    //         //   return axios.delete("http://localhost:3009/keranjangs/" + item.id).catch((error) => console.log(error));
+    //         // });
+    //         this.$router.push({ path: "/pesanan-sukses" });
+    //         this.$toast.success("Sukses dipesan", {
+    //           type: "success",
+    //           position: "top-right",
+    //           dismissible: true,
+    //         });
+    //       })
+    //       .catch((error) => {
+    //         console.log(error);
+    //       });
+    //   } else {
+    //     this.$toast.error("Form harus diisi", {
+    //       type: "error",
+    //       position: "top-right",
+    //       dismissible: true,
+    //     });
+    //   }
+    // },
   },
-  mounted() {
-    axios
-      .get("http://localhost:3009/keranjangs")
-      .then((response) => {
-        this.setKeranjangs(response.data);
-      })
-      .catch((error) => {
-        console.log("Gagal : ", error);
-      });
-  },
+
   computed: {
     totalHarga() {
       return this.keranjangs.reduce(function (items, data) {
-        return items + data.products.harga * data.jumlah_pesanan;
+        return items + data.data.products.harga * data.data.jumlah_pesanan;
       }, 0);
     },
   },

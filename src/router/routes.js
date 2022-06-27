@@ -13,14 +13,6 @@ const routes = [
         },
       },
       {
-        path: "/cari-seleramu",
-        name: "CariSeleramu",
-        component: () => import("../views/CariSeleramu.vue"),
-        meta: {
-          requiresAuth: false,
-        },
-      },
-      {
         path: "/daftar-makanan",
         name: "Foods",
         component: () => import("../views/Foods.vue"),

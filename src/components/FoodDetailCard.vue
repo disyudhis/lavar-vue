@@ -11,9 +11,6 @@
               <li class="mr-2">
                 <a href="#" class="inline-block p-4 rounded-t-lg border-b-2 text-yellow-300 border-yellow-300 hover:text-gray-600 hover:border-gray-300">Description</a>
               </li>
-              <li class="mr-2">
-                <a href="#" class="inline-block p-4 rounded-t-lg border-b-2 border-transparent active" aria-current="page">Reviews</a>
-              </li>
             </ul>
           </div>
 
@@ -31,9 +28,6 @@
                 id="exampleNumber0"
               />
             </span>
-            <!-- <button @click="count--" class="ml-auto bg-yellow-300 w-4 text-white shadow-sm rounded-sm px-1 items-center justify-center flex">-</button>
-            <span @click="count++" class="ml-2 text-gray-900">{{ count }}</span>
-            <button class="ml-2 w-4 bg-yellow-300 text-white shadow-sm rounded-sm px-1 items-center justify-center flex">+</button> -->
           </div>
           <div v-on:submit.prevent class="flex border-t border-b mb-6 border-gray-200 py-2">
             <span class="text-gray-500">Keterangan</span>
@@ -66,49 +60,89 @@
 </template>
 
 <script>
-import axios from "axios";
+import { collection, getFirestore, query, getDocs, addDoc } from "@firebase/firestore";
 
 export default {
   name: "FoodDetailCard",
-  props: {
-    product: {
-      type: Object,
-      default: () => {
-        return {};
+  props: ["product"],
+  data() {
+    return {
+      pesan: {
+        jumlah_pesanan: "",
+        keterangan: "",
       },
-    },
-    pesan: {
-      type: Object,
-      default: () => {
-        return {};
-      },
-    },
+    };
+  },
+  created() {
+    this.getKeranjang();
   },
   methods: {
-    pesanan() {
-      if (this.pesan.jumlah_pesanan) {
-        this.pesan.products = this.product;
-        axios
-          .post("http://localhost:3009/keranjangs", this.pesan)
-          .then(() => {
-            this.$router.push({ path: "/keranjang" });
-            this.$toast.success("Berhasil dimasukkan ke Keranjang", {
-              type: "success",
-              position: "top-right",
-              dismissible: true,
+    getKeranjang() {
+      let q;
+      const db = getFirestore(this.$firebase);
+      q = query(collection(db, "keranjangs"));
+      getDocs(q).then((document) => {
+        document
+          .forEach((document) => {
+            this.pesan.push({
+              id: document.id,
+              data: {
+                ...document.data(),
+              },
             });
           })
           .catch((error) => {
-            console.log(error);
+            alert(error.message);
           });
-      } else {
-        this.$toast.error("Jumlah pesanan harus diisi", {
-          type: "error",
-          position: "top-right",
-          dismissible: true,
-        });
+      });
+    },
+
+    addKeranjang() {
+      if (this.pesan.jumlah_pesanan) {
+        this.pesan.products = this.product;
+        let q;
+        const db = getFirestore(this.$firebase);
+        const formPesanan = {
+          jumlah_pesanan: this.pesan.jumlah_pesanan,
+          keterangan: this.pesan.keterangan,
+        };
+        addDoc(collection(db, "keranjangs"), formPesanan)
+          .then(() => {
+            alert("Success add forum");
+            this.getKeranjang();
+            this.pesan.jumlah_pesanan = "";
+            this.pesan.keterangan = "";
+          })
+          .catch((error) => {
+            alert(error.message);
+          });
       }
     },
+
+    // pesanan() {
+    //   if (this.pesan.jumlah_pesanan) {
+    //     this.pesan.products = this.product;
+    //     axios
+    //       .post("http://localhost:3009/keranjangs", this.pesan)
+    //       .then(() => {
+    //         this.$router.push({ path: "/keranjang" });
+    //         this.$toast.success("Berhasil dimasukkan ke Keranjang", {
+    //           type: "success",
+    //           position: "top-right",
+    //           dismissible: true,
+    //         });
+    //       })
+    //       .catch((error) => {
+    //         console.log(error);
+    //       });
+    //   } else {
+    //     this.$toast.error("Jumlah pesanan harus diisi", {
+    //       type: "error",
+    //       position: "top-right",
+    //       dismissible: true,
+    //     });
+    //   }
+    // },
   },
 };
 </script>

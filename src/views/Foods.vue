@@ -8,23 +8,7 @@
         <h1>Daftar <strong>Makanan</strong></h1>
       </div>
 
-      <div class="mt-2 mb-2 items-center justify-center flex">
-        <ul class="flex flex-wrap text-sm font-medium text-center text-gray-500 dark:text-gray-400">
-          <li class="mr-2 px-10">
-            <a href="#" class="inline-block py-2 px-4 bg-white shadow-lg border text-gray-900 border-transparent w-28 rounded-full active hover:text-white hover:bg-yellow-400 hover:border-transparent" aria-current="page">All</a>
-          </li>
-          <li class="mr-2 px-10">
-            <a href="#" class="inline-block py-2 px-4 bg-white shadow-lg border text-gray-900 border-transparent w-28 rounded-full active hover:text-white hover:bg-yellow-400 hover:border-transparent">Breakfast</a>
-          </li>
-          <li class="mr-2 px-10">
-            <a href="#" class="inline-block py-2 px-4 bg-white shadow-lg border text-gray-900 border-transparent w-full rounded-full active hover:text-white hover:bg-yellow-400 hover:border-transparent">Special Food</a>
-          </li>
-          <li class="mr-2 px-10">
-            <a href="#" class="inline-block py-2 px-4 bg-white shadow-lg border text-gray-900 border-transaparent w-28 rounded-full active hover:text-white hover:bg-yellow-400 hover:border-transparent">Drinks</a>
-          </li>
-        </ul>
-      </div>
-      <form>
+      <!-- <form @click.prevent>
         <div>
           <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-gray-300">Search</label>
           <div class="relative w-3/3 items-center justify-center mx-auto my-5">
@@ -36,16 +20,15 @@
             <input
               v-model="search"
               type="search"
-              id="default-search"
+              id="search"
               class="block p-4 pl-10 w-full text-sm text-gray-900 bg-white shadow-lg rounded-lg border border-transparent focus:ring-yellow-300 focus:border-yellow-300"
               placeholder="Search "
               required
-              @keyup="searchFood"
             />
-            <button type="submit" class="text-white absolute right-2.5 bottom-2.5 bg-yellow-300 hover:bg-yellow-200 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2">Search</button>
+            <button @click="searchFood" class="text-white absolute right-2.5 bottom-2.5 bg-yellow-300 hover:bg-yellow-200 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2">Search</button>
           </div>
         </div>
-      </form>
+      </form> -->
       <div class="text-gray-900 text-2xl mb-2">
         <h2>
           All <strong><b>Products</b></strong>
@@ -70,16 +53,14 @@ body {
 
 <script>
 import NavBar from "../components/NavBar.vue";
-import SideBar from "../components/SideBar.vue";
 import CardsProduct from "../components/CardsProduct.vue";
-import axios from "axios";
 import List from "../components/List.vue";
+import { getFirestore, query, getDocs, collection, orderBy, startAt, endAt } from "@firebase/firestore";
 
 export default {
   name: "Foods",
   components: {
     NavBar,
-    SideBar,
     CardsProduct,
     "app-list": List,
   },
@@ -89,30 +70,51 @@ export default {
       search: "",
     };
   },
+  created() {
+    this.getProducts();
+  },
+
   methods: {
-    setProduct(data) {
-      this.products = data;
-    },
-    searchFood() {
-      axios
-        .get("http://localhost:3009/products?q=" + this.search)
-        .then((response) => {
-          this.setProduct(response.data);
+    getProducts() {
+      let q;
+      const db = getFirestore(this.$firebase);
+      q = query(collection(db, "products"));
+      getDocs(q)
+        .then((document) => {
+          this.products.length = 0;
+          document.forEach((document) => {
+            this.products.push({
+              id: document.id,
+              data: {
+                ...document.data(),
+              },
+            });
+          });
         })
         .catch((error) => {
-          console.log("Gagal : ", error);
+          alert(error.message);
         });
     },
-  },
-  mounted() {
-    axios
-      .get("http://localhost:3009/products")
-      .then((response) => {
-        this.setProduct(response.data);
-      })
-      .catch((error) => {
-        console.log("Gagal : ", error);
-      });
+
+    // searchFood() {
+    //   let q;
+    //   const db = getFirestore(this.$firebase);
+    //   const ref = collection(db, "products");
+    //   q = query(ref, orderBy("nama"), startAt(this.search), endAt(this.search));
+    //   getDocs(q).then((document) => {
+    //     this.products.length = 0;
+    //     document.forEach((document) => {
+    //       console.log(document.data);
+    // this.products.push({
+    //   id: document.id,
+    //   data: {
+    //     ...document.data(),
+    //   },
+    // });
+    // });
+    // })
+
+    // }
   },
 };
 </script>
